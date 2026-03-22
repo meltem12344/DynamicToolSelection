@@ -90,6 +90,47 @@ Vaka çalışmasının amacı problemi nasıl ele aldığımızı görmek olduğ
 
 ## 📊 Örnek Sistem Çıktıları (Console Log)
 
+### 🔹 Senaryo 1 — Doğru Tool Seçimi
+Kullanıcı sorgusu sistem tarafından doğru şekilde analiz edilerek en uygun tool seçilmiştir. Cross-encoder skorlamasında ilgili tool en yüksek skoru almış ve sistem doğru aksiyonu gerçekleştirmiştir.
+
+![Scenario 1](docs/images/tool.png)
+
+![Scenario 1](docs/images/tool1.png)
+
+![Scenario 1](docs/images/tool3.png)
+
+---
+
+### 🔹 Senaryo 2 — Tool Gerekmeyen Durum (No-Tool Case)
+Kullanıcı sorgusu herhangi bir tool gerektirmediğinde sistem düşük güven skorları nedeniyle tool seçmemiş ve doğrudan LLM üzerinden cevap üretmiştir. Bu sayede false-positive tool çağrıları engellenmiştir.
+
+![Scenario 2](docs/images/toolDışı.png)
+
+![Scenario 2](docs/images/toolDışı1.png)
+
+---
+
+### 🔹 Senaryo 3 — Tool seçememe Durumu 
+Çözemediğim bir durum, anlamsal olarak çok yakın toollardan birini seçemedi çünkü skorlar çok fazla yakın birbirine.
+
+![Scenario 3](docs/images/tool2butcouldntchoose.png)
+
+
+---
+
+### 🔹 Genel Değerlendirme
+Yukarıdaki senaryolar, sistemin farklı durumlarda doğru karar verebildiğini göstermektedir:
+
+- Doğru tool seçimi  
+- Gereksiz tool kullanımını engelleme  
+
+mekanizmaları başarılı bir şekilde çalışmaktadır.
+
+- Benzer tool’lar arasında ayrım yapabilme
+
+kısmında sorun yaşıyorum.
+
+
 
 
 
