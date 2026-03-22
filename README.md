@@ -17,7 +17,6 @@ Sistem, vaka çalışmasında istenen kısıtlara %100 uyumlu olarak 3 ana modü
 
 ## 🔹Semantic Tool Selection ve False-Positive Azaltma Yaklaşımı
 
-
 Bu projede, kullanıcı sorgusuna en uygun aracın seçilmesi için iki aşamalı bir semantik arama mimarisi geliştirilmiştir. İlk aşamada, tüm araçlar zenginleştirilmiş açıklamalarıyla birlikte vektör veritabanına (ChromaDB) gömülmüş ve çok dilli bir embedding modeli kullanılarak sorguya en yakın aday araçlar (top-k retrieval) belirlenmiştir. Bu aşamada yalnızca kısa açıklamalar değil; araç yetenekleri, anahtar kelimeler, kullanım örnekleri ve negatif örnekler de embedding metnine dahil edilerek semantik kapsayıcılık artırılmıştır.
 
 İkinci aşamada ise aday araçlar, cross-encoder tabanlı bir yeniden sıralama (re-ranking) modeline tabi tutulmuştur. Bu model, kullanıcı sorgusu ile her bir araç açıklamasını birlikte değerlendirerek bağlamsal uyumluluk skorları üretir. Böylece yalnızca yüzeysel benzerlik değil, anlam düzeyinde eşleşme sağlanır. En yüksek skora sahip araç seçilerek LLM’e yalnızca tek bir tool sunulmakta, bu sayede yanlış araç seçimi (false-positive) riski minimize edilmektedir.
@@ -87,6 +86,11 @@ bir tool selection mekanizması sunmaktadır.
 
 ### 2. Neden LangChain Kullanılmadı?
 Vaka çalışmasının amacı problemi nasıl ele aldığımızı görmek olduğundan, yönlendirme (routing) ve araç seçimi işlemleri LangChain gibi framework'lerin soyutlamalarına bırakılmamıştır. Sistem; **Pydantic** (Veri doğrulama), **OpenAI Native SDK** (Fonksiyon çağırma) ve **ChromaDB** (Vektör arama) kullanılarak tamamen şeffaf ve kontrol edilebilir bir "Pipeline" olarak tasarlanmıştır.
+
+
+## 📊 Örnek Sistem Çıktıları (Console Log)
+
+
 
 
 ## ⚙️ Kurulum ve Çalıştırma 
