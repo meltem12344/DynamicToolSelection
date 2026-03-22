@@ -1,4 +1,4 @@
-# Dynamic Tool Selection and Agent Architecture
+# Dynamic Tool Selection ve Agent Architecture
 Case study kapsamında agent çalışması.
 
 Bu proje, LLM tabanlı ajanların geniş araç havuzları içerisinden doğru aracı seçmesini sağlayan modüler bir tool routing mimarisidir. Sistem, semantic search ve cross-encoder tabanlı re-ranking tekniklerini birleştirerek kullanıcı niyetine en uygun aracı belirler ve false-positive riskini azaltır.
