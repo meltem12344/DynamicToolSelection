@@ -28,7 +28,7 @@ Sonuç olarak geliştirilen yapı; semantic retrieval, cross-encoder reranking v
 
 ## Öne Çıkan Kararlar
 
-### False-Positive Azaltımı için İki Aşamalı Tool Retrieval ve Re-Ranking Mimarisi
+### 1. False-Positive Azaltımı için İki Aşamalı Tool Retrieval ve Re-Ranking Mimarisi
 
 Sadece embedding tabanlı semantik aramaya güvenmek, özellikle doğal dildeki dolaylı ifadelerde ve benzer görünen ancak farklı amaca hizmet eden araçlar arasında false-positive sonuçlara yol açabilmektedir. Bu problemi azaltmak için projede iki aşamalı bir retrieval pipeline tasarlanmıştır.
 
@@ -88,49 +88,151 @@ bir tool selection mekanizması sunmaktadır.
 ### 2. Neden LangChain Kullanılmadı?
 Vaka çalışmasının amacı problemi nasıl ele aldığımızı görmek olduğundan, yönlendirme (routing) ve araç seçimi işlemleri LangChain gibi framework'lerin soyutlamalarına bırakılmamıştır. Sistem; **Pydantic** (Veri doğrulama), **OpenAI Native SDK** (Fonksiyon çağırma) ve **ChromaDB** (Vektör arama) kullanılarak tamamen şeffaf ve kontrol edilebilir bir "Pipeline" olarak tasarlanmıştır.
 
-## Kurulum ve Çalıştırma 
 
-### 🔹 Gereksinimler
+## ⚙️ Kurulum ve Çalıştırma 
 
-Projenin çalıştırılabilmesi için aşağıdaki ortam gereklidir:
+### 1. Gereksinimler
 
-- Python 3.10+
-- pip (Python paket yöneticisi)
+Projeyi çalıştırmadan önce aşağıdakilerin kurulu olması gerekir:
 
----
+- Python 3.10 veya üzeri
+- Git
+- OpenAI API anahtarı (eğer proje içinde OpenAI istemcisi kullanılıyorsa)
 
-### 🔹 Bağımlılıkların kurulması
+Kontrol etmek için:
+
+- `python --version`
+- `git --version`
+
+### 2. Projeyi GitHub’dan İndirme
+
+Terminal açılır ve proje klonlanır:
+
+- `git clone https://github.com/meltem12344/DynamicToolSelection`
+
+Klasöre girilir:
+
+- `cd DynamicToolSelection`
+  
+### 3. Sanal Ortam Oluşturma
+
+Windows
+
+- `python -m venv venv`
+- `venv\Scripts\activate`
+
+Mac / Linux
+
+- `python3 -m venv venv`
+- `source venv/bin/activate`
+
+Aktifleştirme sonrası terminal başında genelde (venv) görünür.
+
+### 4. Bağımlılıkların Kurulumu
 
 - `pip install -r requirements.txt`
 
-### 🔹 Model Yükleme
+### 5. API Key Ayarı
 
-Proje ilk çalıştırıldığında aşağıdaki modeller otomatik olarak indirilir:
+Bu projede gerçek API anahtarları güvenlik nedeniyle GitHub’a yüklenmez.
+Bu yüzden kullanıcı kendi .env dosyasını oluşturmalıdır.
 
-- paraphrase-multilingual-MiniLM-L12-v2 → Embedding modeli (~470MB)
-- cross-encoder/ms-marco-MiniLM-L-6-v2 → Re-ranking modeli (~90MB)
+Proje kök dizininde .env dosyası oluştur:
 
-Bu işlem yalnızca ilk çalıştırmada gerçekleşir.
+Windows
 
-### 🔹 Proje Yapısı
+- `notepad .env`
 
-Ana bileşenler:
+Mac / Linux
 
-- tool_registry.py → Araçların vektör veritabanına (ChromaDB) kaydı
-- embedding_search.py → Semantic search + cross-encoder re-ranking
-- base_tool.py → Tüm tool’ların türetildiği temel sınıf
-- tool_schema.py → Tool metadata ve şema tanımları
-- tools/ → Tüm araç implementasyonları
+- `touch .env`
+- `nano .env`
 
-### 🔹Çalıştırma
+İçine şunu yaz:
 
-Proje aşağıdaki komut ile başlatılır:
+OPENAI_API_KEY=your_api_key_here
+
+
+### 7. İlk Çalıştırmada Model İndirmeleri
+
+Proje ilk kez çalıştırıldığında aşağıdaki modeller otomatik olarak indirilebilir:
+
+- `paraphrase-multilingual-MiniLM-L12-v2` → embedding modeli
+- `cross-encoder/ms-marco-MiniLM-L-6-v2` → re-ranking modeli
+
+Bu indirme işlemi ilk çalıştırmada normalden daha uzun sürebilir.
+Sonraki çalıştırmalarda daha hızlı açılır.
+
+### 8. Proje Yapısı
+
+Önemli dosyalar:
+
+- `app/main.py` → ana giriş noktası
+- `app/tools/tool_registry.py` → tool’ların ChromaDB’ye kaydı
+- `app/tools/base_tool.py` → tüm tool’ların temel sınıfı
+- `app/schemas/tool_schema.py` → tool schema ve metadata tanımları
+- `app/search/embedding_search.py` veya benzeri → semantic search + re-ranking mantığı
+- `app/tools/` → tüm tool implementasyonları
+
+### 9. Projeyi Çalıştırma
+
+Ana dizinde şu komut çalıştırılır:
 
 - `python -m app.main`
 
-Başlatıldığında sistem:
+Başlatıldığında sistem tipik olarak şu adımları yapar:
 
-- Embedding modelini yükler
-- Tool’ları ChromaDB’ye gömer
-- Cross-encoder modelini yükler
-- Kullanıcı sorgularını işlemeye başlar
+1. Embedding modelini yükler
+2. Tool’ları ChromaDB’ye gömer
+3. Cross-encoder modelini yükler
+4. Kullanıcı sorgularını işlemeye başlar
+
+### 10. Örnek Test Sorguları
+
+Kurulum sonrası aşağıdaki sorgularla sistem test edilebilir:
+
+      Bugün Ankara'da hava kaç derece?
+      256 ile 48'i çarpar mısın?
+      "Bugün hava çok güzel" cümlesini İngilizceye çevir.
+      150 doları Türk Lirasına çevir.
+      Yarın saat 14:00 için toplantı ekle.
+      20 dakikalık bir zamanlayıcı başlat.
+      Ahmet'e "Toplantı yarın" konulu bir e-posta gönder.
+      X kullanıcısının toplam kaç sipariş verdiğini öğrenmek istiyorum.
+      https://example.com adresindeki belgeyi okuyup özetle.
+      Yapay zeka hakkında güncel haberleri internette ara.
+
+### 11. Notlar
+
+Bu proje:
+
+- modüler tool mimarisi kullanır
+- semantic search tabanlı tool routing yapar
+- cross-encoder ile re-ranking uygular
+- açıklama, örnek ve metadata tabanlı tool temsilinden yararlanır
+
+Yeni bir tool eklemek için genel akış:
+
+1. `BaseTool` sınıfından türeyen yeni bir tool oluştur
+2. `schema` alanını doldur
+3. `execute()` metodunu yaz
+4. Tool’u `ToolRegistry` içine register et
+
+### 🔹 Kısa Kurulum Özeti
+
+Hızlı kurulum için:
+
+```bash
+git clone https://github.com/KULLANICI_ADIN/REPO_ADIN.git
+cd REPO_ADIN
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+
+.env dosyası oluştur:
+
+OPENAI_API_KEY=your_api_key_here
+
+Projeyi çalıştır:
+
+python -m app.main
