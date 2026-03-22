@@ -142,7 +142,7 @@ Projeyi çalıştırmadan önce aşağıdakilerin kurulu olması gerekir:
 
 - Python 3.10 veya üzeri
 - Git
-- OpenAI API anahtarı (eğer proje içinde OpenAI istemcisi kullanılıyorsa)
+- OpenAI API anahtarı 
 
 Kontrol etmek için:
 
